@@ -94,6 +94,8 @@ scene.add(floor)
 
 const seating1 = new THREE.Group()
 const seating2 = new THREE.Group()
+seating1.position.z = 2
+seating2.position.z = 2
 scene.add(seating1,seating2)
 seating1.position.y = 0.5
 seating1.position.x = 1.5
@@ -127,6 +129,7 @@ for ( let i = 0 ; i < 2 ; i++){
 // Roof
 
 const roof = new THREE.Group()
+roof.position.z = 2
 scene.add(roof)
 
 const roofSideWallMaterial = new THREE.MeshStandardMaterial({color: 0xffaaff})
@@ -195,7 +198,7 @@ road.geometry.setAttribute(
 road.rotation.x = -Math.PI * 0.5
 road.rotation.z = Math.PI * 0.5
 road.position.y = 0.01
-road.position.z = 5
+road.position.z = 7
 scene.add(road)
 
 // BrickWall
