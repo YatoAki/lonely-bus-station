@@ -19,13 +19,12 @@ const fog = new THREE.Fog(0x262837, 7, 28)
 scene.fog = fog
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1,100)
-camera.position.x = 0
-camera.position.y = 10
-camera.position.z = 20
 scene.add(camera)
 
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
+controls.autoRotate = true
+controls.autoRotateSpeed = 4
 
 // Textures
 
@@ -180,9 +179,6 @@ roof.add(roofTop)
 const lightBulb = new THREE.PointLight(0xff7d46,1,7)
 lightBulb.intensity = 10
 lightBulb.position.set(-0.15,2.9,2)
-gui.add(lightBulb.position,"x",-20,20, 0.01)
-gui.add(lightBulb.position,"y",-20,20, 0.01)
-gui.add(lightBulb.position,"z",-20,20, 0.01)
 roof.add(lightBulb)
 
 
@@ -308,6 +304,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 const clock = new THREE.Clock()
 let isLightOn = true;
+let animate = true
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
   if (elapsedTime % 3 < 1.5) {
@@ -321,6 +318,15 @@ const tick = () => {
       isLightOn = false;
     }
   }
+  if (animate === true){
+    camera.position.y = elapsedTime * 1.3
+    camera.position.x = -elapsedTime * 1.3
+    camera.position.z = 40 - (elapsedTime *  6)
+    if (elapsedTime > 5){
+        animate = false
+    }
+}
+
   controls.update()
   renderer.render(scene, camera)
   window.requestAnimationFrame(tick)
