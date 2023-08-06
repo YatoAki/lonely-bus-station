@@ -30,9 +30,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 const clock = new THREE.Clock()
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
-  console.log(elapsedTime)
   renderer.render(scene, camera)
   window.requestAnimationFrame(tick)
 }
 
 tick()
+
+// Responsive
+
+window.addEventListener("resize", () => {
+  sizes.width = window.innerWidth
+  sizes.height = window.innerHeight
+  camera.aspect = sizes.width/sizes.height
+  camera.updateProjectionMatrix()
+  renderer.setSize(sizes.width, sizes.height)
+})
