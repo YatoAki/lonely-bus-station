@@ -303,8 +303,20 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 const clock = new THREE.Clock()
+let isLightOn = true;
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
+  if (elapsedTime % 3 < 1.5) {
+    if (!isLightOn) {
+      lightBulb.intensity = 10; // Turn the light on
+      isLightOn = true;
+    }
+  } else {
+    if (isLightOn) {
+      lightBulb.intensity = 0; // Turn the light off
+      isLightOn = false;
+    }
+  }
   controls.update()
   renderer.render(scene, camera)
   window.requestAnimationFrame(tick)
