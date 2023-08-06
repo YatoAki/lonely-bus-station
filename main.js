@@ -1,10 +1,12 @@
 import "./style.css"
 import * as THREE from 'three'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
-
+import * as dat from "dat.gui"
 // Setup
 
 const canvas = document.querySelector("canvas.webgl")
+
+const gui = new dat.GUI()
 
 const sizes = {
   width: window.innerWidth,
@@ -107,7 +109,7 @@ roof.add(backWall)
 
 const roofTop = new THREE.Mesh(
   new THREE.BoxGeometry(8,0.2,2.7001),
-  new THREE.MeshStandardMaterial({color:0xff0011})
+  new THREE.MeshStandardMaterial({color:0xaa00bb})
 )
 roofTop.position.y = 4
 roofTop.position.z = 0.25
@@ -144,6 +146,29 @@ leftBrickWall.position.y = 2
 rightBrickWall.position.y = 2
 rightBrickWall.position.x = 2
 brickWall.add(leftBrickWall,rightBrickWall)
+
+// Bush
+
+const bush = new THREE.Group()
+scene.add(bush)
+
+const bushGeometry = new THREE.SphereGeometry(1,16,16)
+const bushMaterial = new THREE.MeshStandardMaterial({color: 0x89c854})
+
+const bush1 = new THREE.Mesh(bushGeometry,bushMaterial)
+bush1.scale.set(0.8,0.8,0.8)
+
+const bush2 = new THREE.Mesh(bushGeometry,bushMaterial)
+bush2.scale.set(0.5,0.5,0.5)
+bush2.position.x = 0.7
+
+bush.position.set(-5.2,0.2,-1.4)
+
+gui.add(bush.position, "x", -20, 20 , 0.1)
+gui.add(bush.position, "y", -20, 20 , 0.1)
+gui.add(bush.position, "z", -20, 20 , 0.1)
+bush.add(bush1,bush2)
+
 // Render
 
 const renderer = new THREE.WebGLRenderer({
