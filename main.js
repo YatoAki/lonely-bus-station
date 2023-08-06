@@ -15,6 +15,9 @@ const sizes = {
 
 const scene = new THREE.Scene()
 
+const fog = new THREE.Fog(0x262837, 7, 28)
+scene.fog = fog
+
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1,100)
 camera.position.x = 0
 camera.position.y = 10
@@ -299,6 +302,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
+renderer.setClearColor(0x262837)
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
