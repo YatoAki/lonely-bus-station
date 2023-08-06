@@ -45,6 +45,11 @@ const floorNormalTexture = textureLoader.load('/floor/normal.jpg')
 const floorRoughnessTexture = textureLoader.load('/floor/roughness.jpg')
 const floorHeightTexture = textureLoader.load('/floor/height.png')
 
+const rockColorTexture = textureLoader.load('/rock/basecolor.jpg')
+const rockAmbientOcclusionTexture = textureLoader.load('/rock/ambientOcclusion.jpg')
+const rockNormalTexture = textureLoader.load('/rock/normal.jpg')
+const rockRoughnessTexture = textureLoader.load('/rock/roughness.jpg')
+const rockHeightTexture = textureLoader.load('/rock/height.png')
 
 // Light
 
@@ -262,10 +267,22 @@ const graves = new THREE.Group()
 scene.add(graves)
 
 const graveGeometry = new THREE.BoxGeometry(1,1.5,0.2)
-const graveMaterial = new THREE.MeshStandardMaterial({color: 0xb2b6b1})
+const graveMaterial = new THREE.MeshStandardMaterial({
+  map: rockColorTexture,
+  aoMap: rockAmbientOcclusionTexture,
+  displacementMap: rockHeightTexture,
+  displacementScale: 0.001,
+  normalMap: rockNormalTexture,
+  roughnessMap: rockRoughnessTexture
+})
+
 
 for (let i = 0 ; i < 20 ; i++){
   const grave = new THREE.Mesh(graveGeometry, graveMaterial)
+  grave.geometry.setAttribute(
+    'uv2',
+    new THREE.Float32BufferAttribute(grave.geometry.attributes.uv.array,2)
+  )
   grave.castShadow = true
   grave.position.y = 0.6
   grave.position.z = (Math.random() * 6) - 9.6
