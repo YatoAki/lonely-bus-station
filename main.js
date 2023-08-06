@@ -38,7 +38,7 @@ const bricksRoughnessTexture = textureLoader.load('/bricks/roughness.jpg')
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
 scene.add(ambientLight)
 
-const moonLight =new THREE.DirectionalLight(0xb9d5ff,1)
+const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
 moonLight.position.set(0,4,8)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
@@ -52,6 +52,7 @@ moonLight.shadow.camera.bottom = - 10
 moonLight.shadow.camera.left = - 10
 moonLight.castShadow = true
 scene.add(moonLight)
+
 
 // Objects
 
@@ -140,6 +141,15 @@ const roofTop = new THREE.Mesh(
 roofTop.position.y = 4
 roofTop.position.z = 0.25
 roof.add(roofTop)
+
+const lightBulb1 = new THREE.PointLight(0xff7d46,1,7)
+lightBulb1.intensity = 10
+lightBulb1.position.set(-0.15,2.9,2)
+gui.add(lightBulb1.position,"x",-20,20, 0.01)
+gui.add(lightBulb1.position,"y",-20,20, 0.01)
+gui.add(lightBulb1.position,"z",-20,20, 0.01)
+roof.add(lightBulb1)
+
 
 // Road
 
