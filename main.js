@@ -163,11 +163,24 @@ bush2.scale.set(0.5,0.5,0.5)
 bush2.position.x = 0.7
 
 bush.position.set(-5.2,0.2,-1.4)
-
-gui.add(bush.position, "x", -20, 20 , 0.1)
-gui.add(bush.position, "y", -20, 20 , 0.1)
-gui.add(bush.position, "z", -20, 20 , 0.1)
 bush.add(bush1,bush2)
+
+// Grave
+const graves = new THREE.Group()
+scene.add(graves)
+
+const graveGeometry = new THREE.BoxGeometry(1,1.5,0.2)
+const graveMaterial = new THREE.MeshStandardMaterial({color: 0xb2b6b1})
+
+for (let i = 0 ; i < 20 ; i++){
+  const grave = new THREE.Mesh(graveGeometry, graveMaterial)
+  grave.position.y = 0.6
+  grave.position.z = (Math.random() * 6) - 9.6
+  grave.position.x = (Math.random() - 0.5) * 18
+  grave.rotation.y = (Math.random() - 0.5) * 0.4
+  grave.rotation.z = (Math.random() - 0.5) * 0.4
+  graves.add(grave)
+}
 
 // Render
 
