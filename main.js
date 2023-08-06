@@ -15,7 +15,7 @@ const sizes = {
 
 const scene = new THREE.Scene()
 
-const fog = new THREE.Fog(0x262837, 7, 28)
+const fog = new THREE.Fog(0x262837, 5, 28)
 scene.fog = fog
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1,100)
@@ -55,10 +55,10 @@ const rockHeightTexture = textureLoader.load('/rock/height.png')
 
 // Light
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
+const ambientLight = new THREE.AmbientLight(0x555555, 0.15)
 scene.add(ambientLight)
 
-const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
+const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.05)
 moonLight.position.set(0,4,-8)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
@@ -174,6 +174,7 @@ const roofTop = new THREE.Mesh(
 )
 roofTop.position.y = 4
 roofTop.position.z = 0.25
+roofTop.castShadow = true
 roof.add(roofTop)
 
 const lightBulb = new THREE.PointLight(0xff7d46,1,7)
