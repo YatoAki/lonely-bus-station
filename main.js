@@ -26,8 +26,26 @@ controls.enableDamping = true
 
 // Light
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
 scene.add(ambientLight)
+
+const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
+moonLight.position.set(0,4,8)
+moonLight.shadow.mapSize.width = 1024
+moonLight.shadow.mapSize.height = 1024
+
+moonLight.shadow.camera.near = 0
+moonLight.shadow.camera.far = 26
+
+moonLight.shadow.camera.top = 10
+moonLight.shadow.camera.right = 10
+moonLight.shadow.camera.bottom = - 10
+moonLight.shadow.camera.left = - 10
+moonLight.castShadow = true
+scene.add(moonLight)
+
+const moonLightCameraHelper = new THREE.CameraHelper(moonLight.shadow.camera)
+scene.add(moonLightCameraHelper)
 
 // Objects
 
@@ -37,6 +55,7 @@ const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(20,20),
   new THREE.MeshStandardMaterial({color: 0xffffff})
 )
+floor.receiveShadow = true
 floor.rotation.x = -Math.PI * 0.5
 scene.add(floor)
 
@@ -105,6 +124,7 @@ const backWall = new THREE.Mesh(
 backWall.rotation.y = Math.PI * 0.5
 backWall.position.z = -1
 backWall.position.y = 4/2
+backWall.castShadow = true
 roof.add(backWall)
 
 const roofTop = new THREE.Mesh(
@@ -141,6 +161,8 @@ const leftBrickWall = new THREE.Mesh(
   new THREE.BoxGeometry(2,4,1),
   brickWallTexture
 )
+rightBrickWall.castShadow = true
+leftBrickWall.castShadow = true
 leftBrickWall.position.x = -9
 leftBrickWall.position.y = 2
 rightBrickWall.position.y = 2
@@ -187,7 +209,7 @@ for (let i = 0 ; i < 20 ; i++){
 const renderer = new THREE.WebGLRenderer({
   canvas:canvas
 })
-
+renderer.shadowMap.enabled = true
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
