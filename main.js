@@ -124,6 +124,26 @@ road.position.y = 0.01
 road.position.z = 5
 scene.add(road)
 
+// BrickWall
+const brickWall = new THREE.Group()
+brickWall.position.z = -2
+scene.add(brickWall)
+
+const brickWallTexture = new THREE.MeshStandardMaterial({color: 0xff0000})
+const rightBrickWall = new THREE.Mesh(
+  new THREE.BoxGeometry(16,4,1),
+  brickWallTexture
+)
+
+const leftBrickWall = new THREE.Mesh(
+  new THREE.BoxGeometry(2,4,1),
+  brickWallTexture
+)
+leftBrickWall.position.x = -9
+leftBrickWall.position.y = 2
+rightBrickWall.position.y = 2
+rightBrickWall.position.x = 2
+brickWall.add(leftBrickWall,rightBrickWall)
 // Render
 
 const renderer = new THREE.WebGLRenderer({
