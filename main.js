@@ -116,7 +116,7 @@ roof.add(leftWall)
 roof.add(rightWall)
 
 const roofBackWallMaterial = new THREE.MeshStandardMaterial({color: 0xffaaff})
-const roofBackWallGeometry = new THREE.BoxGeometry(0.2,4,7)
+const roofBackWallGeometry = new THREE.BoxGeometry(0.2,4,7.2)
 const backWall = new THREE.Mesh(
   roofBackWallGeometry,
   roofBackWallMaterial
@@ -210,6 +210,7 @@ const renderer = new THREE.WebGLRenderer({
   canvas:canvas
 })
 renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
