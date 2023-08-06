@@ -113,6 +113,17 @@ roofTop.position.y = 4
 roofTop.position.z = 0.25
 roof.add(roofTop)
 
+// Road
+
+const road = new THREE.Mesh(
+  new THREE.PlaneGeometry(20,6),
+  new THREE.MeshStandardMaterial({color:0xaaffdd})
+)
+road.rotation.x = -Math.PI * 0.5
+road.position.y = 0.01
+road.position.z = 5
+scene.add(road)
+
 // Render
 
 const renderer = new THREE.WebGLRenderer({
