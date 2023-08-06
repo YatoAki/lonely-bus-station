@@ -24,12 +24,21 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
+// Textures
+
+const textureLoader = new THREE.TextureLoader()
+
+const bricksColorTexture = textureLoader.load('/bricks/color.jpg')
+const bricksAmbientOcclusionTexture = textureLoader.load('/bricks/ambientOcclusion.jpg')
+const bricksNormalTexture = textureLoader.load('/bricks/normal.jpg')
+const bricksRoughnessTexture = textureLoader.load('/bricks/roughness.jpg')
+
 // Light
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
 scene.add(ambientLight)
 
-const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
+const moonLight =new THREE.DirectionalLight(0xb9d5ff,1)
 moonLight.position.set(0,4,8)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
@@ -43,9 +52,6 @@ moonLight.shadow.camera.bottom = - 10
 moonLight.shadow.camera.left = - 10
 moonLight.castShadow = true
 scene.add(moonLight)
-
-const moonLightCameraHelper = new THREE.CameraHelper(moonLight.shadow.camera)
-scene.add(moonLightCameraHelper)
 
 // Objects
 
@@ -151,15 +157,30 @@ const brickWall = new THREE.Group()
 brickWall.position.z = -2
 scene.add(brickWall)
 
-const brickWallTexture = new THREE.MeshStandardMaterial({color: 0xff0000})
+const brickWallTexture = new THREE.MeshStandardMaterial({
+  map: bricksColorTexture,
+  aoMap: bricksAmbientOcclusionTexture,
+  normalMap: bricksNormalTexture,
+  roughnessMap: bricksRoughnessTexture
+})
+
+
 const rightBrickWall = new THREE.Mesh(
   new THREE.BoxGeometry(16,4,1),
   brickWallTexture
+)
+rightBrickWall.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(rightBrickWall.geometry.attributes.uv.array,2)
 )
 
 const leftBrickWall = new THREE.Mesh(
   new THREE.BoxGeometry(2,4,1),
   brickWallTexture
+)
+leftBrickWall.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(leftBrickWall.geometry.attributes.uv.array,2)
 )
 rightBrickWall.castShadow = true
 leftBrickWall.castShadow = true
@@ -196,6 +217,7 @@ const graveMaterial = new THREE.MeshStandardMaterial({color: 0xb2b6b1})
 
 for (let i = 0 ; i < 20 ; i++){
   const grave = new THREE.Mesh(graveGeometry, graveMaterial)
+  grave.castShadow = true
   grave.position.y = 0.6
   grave.position.z = (Math.random() * 6) - 9.6
   grave.position.x = (Math.random() - 0.5) * 18
