@@ -33,13 +33,26 @@ const bricksAmbientOcclusionTexture = textureLoader.load('/bricks/ambientOcclusi
 const bricksNormalTexture = textureLoader.load('/bricks/normal.jpg')
 const bricksRoughnessTexture = textureLoader.load('/bricks/roughness.jpg')
 
+const roadsColorTexture = textureLoader.load('/roads/basecolor.jpg')
+const roadsAmbientOcclusionTexture = textureLoader.load('/roads/ambientOcclusion.jpg')
+const roadsNormalTexture = textureLoader.load('/roads/normal.jpg')
+const roadsRoughnessTexture = textureLoader.load('/roads/roughness.jpg')
+const roadsHeightTexture = textureLoader.load('/roads/height.png')
+
+const floorColorTexture = textureLoader.load('/floor/basecolor.jpg')
+const floorAmbientOcclusionTexture = textureLoader.load('/floor/ambientOcclusion.jpg')
+const floorNormalTexture = textureLoader.load('/floor/normal.jpg')
+const floorRoughnessTexture = textureLoader.load('/floor/roughness.jpg')
+const floorHeightTexture = textureLoader.load('/floor/height.png')
+
+
 // Light
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
 scene.add(ambientLight)
 
 const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
-moonLight.position.set(0,4,8)
+moonLight.position.set(0,4,-8)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
 
@@ -60,7 +73,18 @@ scene.add(moonLight)
 
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(20,20),
-  new THREE.MeshStandardMaterial({color: 0xffffff})
+  new THREE.MeshStandardMaterial({
+    map: floorColorTexture,
+    aoMap: floorAmbientOcclusionTexture,
+    displacementMap: floorHeightTexture,
+    displacementScale: 0.1,
+    normalMap: floorNormalTexture,
+    roughnessMap: floorRoughnessTexture
+  })
+)
+floor.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(floor.geometry.attributes.uv.array,2)
 )
 floor.receiveShadow = true
 floor.rotation.x = -Math.PI * 0.5
@@ -142,22 +166,34 @@ roofTop.position.y = 4
 roofTop.position.z = 0.25
 roof.add(roofTop)
 
-const lightBulb1 = new THREE.PointLight(0xff7d46,1,7)
-lightBulb1.intensity = 10
-lightBulb1.position.set(-0.15,2.9,2)
-gui.add(lightBulb1.position,"x",-20,20, 0.01)
-gui.add(lightBulb1.position,"y",-20,20, 0.01)
-gui.add(lightBulb1.position,"z",-20,20, 0.01)
-roof.add(lightBulb1)
+const lightBulb = new THREE.PointLight(0xff7d46,1,7)
+lightBulb.intensity = 10
+lightBulb.position.set(-0.15,2.9,2)
+gui.add(lightBulb.position,"x",-20,20, 0.01)
+gui.add(lightBulb.position,"y",-20,20, 0.01)
+gui.add(lightBulb.position,"z",-20,20, 0.01)
+roof.add(lightBulb)
 
 
 // Road
 
 const road = new THREE.Mesh(
-  new THREE.PlaneGeometry(20,6),
-  new THREE.MeshStandardMaterial({color:0xaaffdd})
+  new THREE.PlaneGeometry(6,20),
+  new THREE.MeshStandardMaterial({
+    map: roadsColorTexture,
+    aoMap: roadsAmbientOcclusionTexture,
+    displacementMap: roadsHeightTexture,
+    displacementScale: 0.1,
+    normalMap: roadsNormalTexture,
+    roughnessMap: roadsRoughnessTexture
+  })
+)
+road.geometry.setAttribute(
+  'uv2',
+  new THREE.Float32BufferAttribute(road.geometry.attributes.uv.array,2)
 )
 road.rotation.x = -Math.PI * 0.5
+road.rotation.z = Math.PI * 0.5
 road.position.y = 0.01
 road.position.z = 5
 scene.add(road)
