@@ -22,7 +22,8 @@ const sizes = {
 
 const scene = new THREE.Scene()
 
-const fog = new THREE.Fog(0x262837, 5, 28)
+const fog = new THREE.Fog(0x262837, 5, 17)
+gui.add(fog,"far",0,50,0.5)
 scene.fog = fog
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1,100)
@@ -191,9 +192,6 @@ roof.add(roofTop)
 const lightBulb = new THREE.PointLight(parameters.bulbColor,1,5.2,1.6)
 lightBulb.intensity = 10
 lightBulb.position.set(-0.15,3.95,1.06)
-gui.add(lightBulb.position,"x",-10,10,0.01)
-gui.add(lightBulb.position,"y",-10,10,0.01)
-gui.add(lightBulb.position,"z",-10,10,0.01)
 lightBulb.castShadow = true
 roof.add(lightBulb)
 
@@ -336,7 +334,7 @@ const tick = () => {
     }
   }
   if (animate === true){
-    camera.position.y = elapsedTime * 1.3
+    camera.position.y = elapsedTime * 0.7
     camera.position.x = -elapsedTime * 1.3
     camera.position.z = 40 - (elapsedTime *  6)
     if (elapsedTime > 5){
