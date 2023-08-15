@@ -12,7 +12,8 @@ const parameters = {
   seatingColor: 0xf2f2f2,
   stationColor: 0xc7e2f5,
   roofColor: 0x939393,
-  bulbColor: 0xffffff
+  bulbColor: 0xffffff,
+  rainColor: 0x3b3b46
 }
 
 const sizes = {
@@ -22,8 +23,7 @@ const sizes = {
 
 const scene = new THREE.Scene()
 
-const fog = new THREE.Fog(0x262837, 5, 17)
-gui.add(fog,"far",0,50,0.5)
+const fog = new THREE.Fog(0x262837, 5, 22)
 scene.fog = fog
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1,100)
@@ -59,6 +59,7 @@ const rockNormalTexture = textureLoader.load('/rock/normal.jpg')
 const rockRoughnessTexture = textureLoader.load('/rock/roughness.jpg')
 const rockHeightTexture = textureLoader.load('/rock/height.png')
 
+const rainTexture = textureLoader.load('/rainDrop.png')
 // Light
 
 const ambientLight = new THREE.AmbientLight(0x555555, 0.15)
@@ -81,6 +82,31 @@ scene.add(moonLight)
 
 
 // Objects
+
+// Rain
+
+const rainCount = 10000
+const rainGeometry = new THREE.BufferGeometry()
+const rainPositions = new Float32Array(rainCount * 3)
+for(let i = 0 ; i < rainCount ; i++){
+  const i3 = i * 3
+  rainPositions[i3] = (Math.random() - 0.5) * 20
+  rainPositions[i3+1] = Math.random() * 10
+  rainPositions[i3+2] = (Math.random() - 0.5) * 20
+}
+const rainMaterial = new THREE.PointsMaterial({
+  size:0.1,
+  color: parameters.rainColor,
+  alphaMap: rainTexture,
+  transparent: true
+})
+rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions,3))
+const rain = new THREE.Points(rainGeometry,rainMaterial)
+scene.add(rain)
+
+gui.addColor(parameters,"rainColor").onChange(()=>{
+  rainMaterial.color.set(parameters.rainColor)
+})
 
 // Floor
 const earth = new THREE.Mesh(
