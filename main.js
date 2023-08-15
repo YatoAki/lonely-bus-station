@@ -95,7 +95,7 @@ for(let i = 0 ; i < rainCount ; i++){
   rainPositions[i3+2] = (Math.random() - 0.5) * 20
 }
 const rainMaterial = new THREE.PointsMaterial({
-  size:0.1,
+  size:0.2,
   color: parameters.rainColor,
   alphaMap: rainTexture,
   transparent: true
@@ -348,6 +348,10 @@ let isLightOn = true;
 let animate = true
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
+  rain.position.y -= 0.2
+  if (rain.position.y < -5){
+    rain.position.y = 0
+  }
   if (elapsedTime % 3 < 1.5) {
     if (!isLightOn) {
       lightBulb.intensity = 10; // Turn the light on
