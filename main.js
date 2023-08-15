@@ -64,7 +64,7 @@ const ambientLight = new THREE.AmbientLight(0x555555, 0.15)
 scene.add(ambientLight)
 
 const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
-moonLight.position.set(0,4,-8)
+moonLight.position.set(0,3,-10)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
 
@@ -209,6 +209,7 @@ road.rotation.x = -Math.PI * 0.5
 road.rotation.z = Math.PI * 0.5
 road.position.y = 0.01
 road.position.z = 7
+road.receiveShadow = true
 scene.add(road)
 
 // BrickWall
@@ -351,4 +352,3 @@ window.addEventListener("resize", () => {
 })
 
 // Testing
-
