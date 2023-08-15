@@ -82,10 +82,16 @@ scene.add(moonLight)
 // Objects
 
 // Floor
-
+const earth = new THREE.Mesh(
+  new THREE.BoxGeometry(20,0.6,20),
+  new THREE.MeshStandardMaterial({color:0x262837})
+)
+earth.position.y = -0.3
+scene.add(earth)
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(20,20),
   new THREE.MeshStandardMaterial({
+    side: THREE.DoubleSide,
     map: floorColorTexture,
     aoMap: floorAmbientOcclusionTexture,
     displacementMap: floorHeightTexture,
