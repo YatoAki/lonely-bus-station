@@ -6,7 +6,14 @@ import * as dat from "dat.gui"
 
 const canvas = document.querySelector("canvas.webgl")
 
-const gui = new dat.GUI()
+const gui = new dat.GUI({width:500})
+
+const parameters = {
+  seatingColor: 0xf2f2f2,
+  stationColor: 0xc7e2f5,
+  roofColor: 0x939393,
+  bulbColor: 0xffffff
+}
 
 const sizes = {
   width: window.innerWidth,
@@ -106,9 +113,9 @@ seating1.position.y = 0.5
 seating1.position.x = 1.5
 seating2.position.y = 0.5
 seating2.position.x = -1.5
+const steadMaterial = new THREE.MeshStandardMaterial({color:parameters.seatingColor})
 for ( let i = 0 ; i < 2 ; i++){
   const standGeometry = new THREE.BoxGeometry(0.1,1,0.1)
-  const steadMaterial = new THREE.MeshStandardMaterial({color:0xff00ff})
   const stand1 = new THREE.Mesh(
     standGeometry,
     steadMaterial
@@ -137,15 +144,15 @@ const roof = new THREE.Group()
 roof.position.z = 2
 scene.add(roof)
 
-const roofSideWallMaterial = new THREE.MeshStandardMaterial({color: 0xffaaff})
+const stationMaterial = new THREE.MeshStandardMaterial({color: parameters.stationColor})
 const roofSideWallGeometry = new THREE.BoxGeometry(0.2,4,2)
 const leftWall = new THREE.Mesh(
   roofSideWallGeometry,
-  roofSideWallMaterial
+  stationMaterial
 )
 const rightWall = new THREE.Mesh(
   roofSideWallGeometry,
-  roofSideWallMaterial
+  stationMaterial
 )
 leftWall.position.y = 4/2
 leftWall.position.x = -3.5
@@ -154,11 +161,10 @@ rightWall.position.x = 3.5
 roof.add(leftWall)
 roof.add(rightWall)
 
-const roofBackWallMaterial = new THREE.MeshStandardMaterial({color: 0xffaaff})
 const roofBackWallGeometry = new THREE.BoxGeometry(0.2,4,7.2)
 const backWall = new THREE.Mesh(
   roofBackWallGeometry,
-  roofBackWallMaterial
+  stationMaterial
 )
 backWall.rotation.y = Math.PI * 0.5
 backWall.position.z = -1
@@ -166,16 +172,17 @@ backWall.position.y = 4/2
 backWall.castShadow = true
 roof.add(backWall)
 
+const roofMaterial = new THREE.MeshStandardMaterial({color:parameters.roofColor})
 const roofTop = new THREE.Mesh(
   new THREE.BoxGeometry(8,0.2,2.7001),
-  new THREE.MeshStandardMaterial({color:0xaa00bb})
+  roofMaterial
 )
 roofTop.position.y = 4
 roofTop.position.z = 0.25
 roofTop.castShadow = true
 roof.add(roofTop)
 
-const lightBulb = new THREE.PointLight(0xff7d46,1,7)
+const lightBulb = new THREE.PointLight(parameters.bulbColor,1,7)
 lightBulb.intensity = 10
 lightBulb.position.set(-0.15,2.9,2)
 roof.add(lightBulb)
@@ -324,7 +331,7 @@ const tick = () => {
     if (elapsedTime > 5){
         animate = false
     }
-}
+  }
 
   controls.update()
   renderer.render(scene, camera)
@@ -342,3 +349,6 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix()
   renderer.setSize(sizes.width, sizes.height)
 })
+
+// Testing
+
