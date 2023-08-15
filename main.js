@@ -361,9 +361,9 @@ const tick = () => {
     }
   }
   if (animate === true){
-    camera.position.y = elapsedTime * 0.7
-    camera.position.x = -elapsedTime * 1.3
-    camera.position.z = 40 - (elapsedTime *  6)
+    camera.position.y = elapsedTime * 2
+    camera.position.x = -elapsedTime * 2
+    camera.position.z = 40 - (elapsedTime *  5.8)
     if (elapsedTime > 5){
         animate = false
     }
