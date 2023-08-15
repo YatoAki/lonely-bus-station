@@ -63,7 +63,7 @@ const rockHeightTexture = textureLoader.load('/rock/height.png')
 const ambientLight = new THREE.AmbientLight(0x555555, 0.15)
 scene.add(ambientLight)
 
-const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.05)
+const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
 moonLight.position.set(0,4,-8)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
