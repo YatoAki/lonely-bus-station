@@ -106,8 +106,8 @@ scene.add(floor)
 
 const seating1 = new THREE.Group()
 const seating2 = new THREE.Group()
-seating1.position.z = 2
-seating2.position.z = 2
+seating1.position.z = 2.5
+seating2.position.z = 2.5
 scene.add(seating1,seating2)
 seating1.position.y = 0.5
 seating1.position.x = 1.5
@@ -141,7 +141,7 @@ for ( let i = 0 ; i < 2 ; i++){
 // Roof
 
 const roof = new THREE.Group()
-roof.position.z = 2
+roof.position.z = 2.5
 scene.add(roof)
 
 const stationMaterial = new THREE.MeshStandardMaterial({color: parameters.stationColor})
@@ -182,9 +182,13 @@ roofTop.position.z = 0.25
 roofTop.castShadow = true
 roof.add(roofTop)
 
-const lightBulb = new THREE.PointLight(parameters.bulbColor,1,7)
+const lightBulb = new THREE.PointLight(parameters.bulbColor,1,5.2,1.6)
 lightBulb.intensity = 10
-lightBulb.position.set(-0.15,2.9,2)
+lightBulb.position.set(-0.15,3.95,1.06)
+gui.add(lightBulb.position,"x",-10,10,0.01)
+gui.add(lightBulb.position,"y",-10,10,0.01)
+gui.add(lightBulb.position,"z",-10,10,0.01)
+lightBulb.castShadow = true
 roof.add(lightBulb)
 
 
