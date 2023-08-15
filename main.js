@@ -6,7 +6,15 @@ import * as dat from "dat.gui"
 
 const canvas = document.querySelector("canvas.webgl")
 
-const gui = new dat.GUI()
+const gui = new dat.GUI({width:500})
+
+const parameters = {
+  seatingColor: 0xf2f2f2,
+  stationColor: 0xc7e2f5,
+  roofColor: 0x939393,
+  bulbColor: 0xffffff,
+  rainColor: 0x3b3b46
+}
 
 const sizes = {
   width: window.innerWidth,
@@ -15,7 +23,7 @@ const sizes = {
 
 const scene = new THREE.Scene()
 
-const fog = new THREE.Fog(0x262837, 5, 28)
+const fog = new THREE.Fog(0x262837, 5, 22)
 scene.fog = fog
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1,100)
@@ -23,8 +31,6 @@ scene.add(camera)
 
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-controls.autoRotate = true
-controls.autoRotateSpeed = 2
 
 // Textures
 
@@ -53,13 +59,14 @@ const rockNormalTexture = textureLoader.load('/rock/normal.jpg')
 const rockRoughnessTexture = textureLoader.load('/rock/roughness.jpg')
 const rockHeightTexture = textureLoader.load('/rock/height.png')
 
+const rainTexture = textureLoader.load('/rainDrop.png')
 // Light
 
 const ambientLight = new THREE.AmbientLight(0x555555, 0.15)
 scene.add(ambientLight)
 
-const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.05)
-moonLight.position.set(0,4,-8)
+const moonLight =new THREE.DirectionalLight(0xb9d5ff,0.2)
+moonLight.position.set(0,3,-10)
 moonLight.shadow.mapSize.width = 1024
 moonLight.shadow.mapSize.height = 1024
 
@@ -76,11 +83,42 @@ scene.add(moonLight)
 
 // Objects
 
-// Floor
+// Rain
 
+const rainCount = 10000
+const rainGeometry = new THREE.BufferGeometry()
+const rainPositions = new Float32Array(rainCount * 3)
+for(let i = 0 ; i < rainCount ; i++){
+  const i3 = i * 3
+  rainPositions[i3] = (Math.random() - 0.5) * 20
+  rainPositions[i3+1] = Math.random() * 10
+  rainPositions[i3+2] = (Math.random() - 0.5) * 20
+}
+const rainMaterial = new THREE.PointsMaterial({
+  size:0.2,
+  color: parameters.rainColor,
+  alphaMap: rainTexture,
+  transparent: true
+})
+rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions,3))
+const rain = new THREE.Points(rainGeometry,rainMaterial)
+scene.add(rain)
+
+gui.addColor(parameters,"rainColor").onChange(()=>{
+  rainMaterial.color.set(parameters.rainColor)
+})
+
+// Floor
+const earth = new THREE.Mesh(
+  new THREE.BoxGeometry(20,0.6,20),
+  new THREE.MeshStandardMaterial({color:0x262837})
+)
+earth.position.y = -0.3
+scene.add(earth)
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(20,20),
   new THREE.MeshStandardMaterial({
+    side: THREE.DoubleSide,
     map: floorColorTexture,
     aoMap: floorAmbientOcclusionTexture,
     displacementMap: floorHeightTexture,
@@ -101,16 +139,16 @@ scene.add(floor)
 
 const seating1 = new THREE.Group()
 const seating2 = new THREE.Group()
-seating1.position.z = 2
-seating2.position.z = 2
+seating1.position.z = 2.5
+seating2.position.z = 2.5
 scene.add(seating1,seating2)
 seating1.position.y = 0.5
 seating1.position.x = 1.5
 seating2.position.y = 0.5
 seating2.position.x = -1.5
+const steadMaterial = new THREE.MeshStandardMaterial({color:parameters.seatingColor})
 for ( let i = 0 ; i < 2 ; i++){
   const standGeometry = new THREE.BoxGeometry(0.1,1,0.1)
-  const steadMaterial = new THREE.MeshStandardMaterial({color:0xff00ff})
   const stand1 = new THREE.Mesh(
     standGeometry,
     steadMaterial
@@ -136,18 +174,18 @@ for ( let i = 0 ; i < 2 ; i++){
 // Roof
 
 const roof = new THREE.Group()
-roof.position.z = 2
+roof.position.z = 2.5
 scene.add(roof)
 
-const roofSideWallMaterial = new THREE.MeshStandardMaterial({color: 0xffaaff})
+const stationMaterial = new THREE.MeshStandardMaterial({color: parameters.stationColor})
 const roofSideWallGeometry = new THREE.BoxGeometry(0.2,4,2)
 const leftWall = new THREE.Mesh(
   roofSideWallGeometry,
-  roofSideWallMaterial
+  stationMaterial
 )
 const rightWall = new THREE.Mesh(
   roofSideWallGeometry,
-  roofSideWallMaterial
+  stationMaterial
 )
 leftWall.position.y = 4/2
 leftWall.position.x = -3.5
@@ -156,11 +194,10 @@ rightWall.position.x = 3.5
 roof.add(leftWall)
 roof.add(rightWall)
 
-const roofBackWallMaterial = new THREE.MeshStandardMaterial({color: 0xffaaff})
 const roofBackWallGeometry = new THREE.BoxGeometry(0.2,4,7.2)
 const backWall = new THREE.Mesh(
   roofBackWallGeometry,
-  roofBackWallMaterial
+  stationMaterial
 )
 backWall.rotation.y = Math.PI * 0.5
 backWall.position.z = -1
@@ -168,18 +205,20 @@ backWall.position.y = 4/2
 backWall.castShadow = true
 roof.add(backWall)
 
+const roofMaterial = new THREE.MeshStandardMaterial({color:parameters.roofColor})
 const roofTop = new THREE.Mesh(
   new THREE.BoxGeometry(8,0.2,2.7001),
-  new THREE.MeshStandardMaterial({color:0xaa00bb})
+  roofMaterial
 )
 roofTop.position.y = 4
 roofTop.position.z = 0.25
 roofTop.castShadow = true
 roof.add(roofTop)
 
-const lightBulb = new THREE.PointLight(0xff7d46,1,7)
+const lightBulb = new THREE.PointLight(parameters.bulbColor,1,5.2,1.6)
 lightBulb.intensity = 10
-lightBulb.position.set(-0.15,2.9,2)
+lightBulb.position.set(-0.15,3.95,1.06)
+lightBulb.castShadow = true
 roof.add(lightBulb)
 
 
@@ -204,6 +243,7 @@ road.rotation.x = -Math.PI * 0.5
 road.rotation.z = Math.PI * 0.5
 road.position.y = 0.01
 road.position.z = 7
+road.receiveShadow = true
 scene.add(road)
 
 // BrickWall
@@ -308,6 +348,10 @@ let isLightOn = true;
 let animate = true
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
+  rain.position.y -= 0.2
+  if (rain.position.y < -5){
+    rain.position.y = 0
+  }
   if (elapsedTime % 3 < 1.5) {
     if (!isLightOn) {
       lightBulb.intensity = 10; // Turn the light on
@@ -320,13 +364,13 @@ const tick = () => {
     }
   }
   if (animate === true){
-    camera.position.y = elapsedTime * 1.3
+    camera.position.y = elapsedTime * 0.7
     camera.position.x = -elapsedTime * 1.3
     camera.position.z = 40 - (elapsedTime *  6)
     if (elapsedTime > 5){
         animate = false
     }
-}
+  }
 
   controls.update()
   renderer.render(scene, camera)
@@ -344,3 +388,5 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix()
   renderer.setSize(sizes.width, sizes.height)
 })
+
+// Testing
