@@ -6,7 +6,7 @@ import * as dat from "dat.gui"
 
 const canvas = document.querySelector("canvas.webgl")
 
-const gui = new dat.GUI({width:500})
+// const gui = new dat.GUI({width:500})
 
 const parameters = {
   seatingColor: 0xf2f2f2,
@@ -104,9 +104,6 @@ rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions,3)
 const rain = new THREE.Points(rainGeometry,rainMaterial)
 scene.add(rain)
 
-gui.addColor(parameters,"rainColor").onChange(()=>{
-  rainMaterial.color.set(parameters.rainColor)
-})
 
 // Floor
 const earth = new THREE.Mesh(
