@@ -85,17 +85,18 @@ scene.add(moonLight)
 
 // Rain
 
-const rainCount = 10000
+const rainCount = 50000
 const rainGeometry = new THREE.BufferGeometry()
 const rainPositions = new Float32Array(rainCount * 3)
 for(let i = 0 ; i < rainCount ; i++){
   const i3 = i * 3
   rainPositions[i3] = (Math.random() - 0.5) * 20
-  rainPositions[i3+1] = Math.random() * 10
+  rainPositions[i3+1] = Math.random() * 15
   rainPositions[i3+2] = (Math.random() - 0.5) * 20
 }
 const rainMaterial = new THREE.PointsMaterial({
-  size:0.2,
+  size:0.1,
+  fog:true,
   color: parameters.rainColor,
   alphaMap: rainTexture,
   transparent: true
@@ -103,7 +104,6 @@ const rainMaterial = new THREE.PointsMaterial({
 rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions,3))
 const rain = new THREE.Points(rainGeometry,rainMaterial)
 scene.add(rain)
-
 
 // Floor
 const earth = new THREE.Mesh(
